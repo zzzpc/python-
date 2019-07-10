@@ -1,0 +1,18 @@
+import numpy as np
+import pandas as pd
+
+
+if __name__ == '__main__':
+        #df=pd.read_excel("cc.xlsx",skiprows=2,usecols="E,F,G,J")#选择性的读取表中的行列数据，usecols="?-?"
+        df = pd.read_excel("test.xlsx",header=77)#index_col是指定哪一列为索引列
+        df.columns=['书名','位置']
+        keyword="鲁迅"
+        dic={}
+        author=df['书名']
+        for i in author.index:
+            s=str(author[i])
+            result=s.find(keyword)
+            if result != -1:
+                dic[df.iloc[i,0]]=df.iloc[i,1]
+
+        print(dic)

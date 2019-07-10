@@ -1,0 +1,15 @@
+import numpy as np
+import pandas as pd
+
+
+if __name__ == '__main__':
+    df=pd.read_excel("cc.xlsx",header=None)#设置header为none后INDEX索引值就变为数字（index_col可以指定索引列）
+    s1=pd.Series([1,2,3],index=[1,2,3],name='a')
+    s2=pd.Series([4,5,6],index=[1,2,3],name='aa')
+    s3=pd.Series([7,8,9],index=[1,2,3], name='aaa')
+    #s3=pd.Series([7,8,9],index=[2,3,5],name='aaa')如果index值不统一，则最后会取所有index的一个并集来显示数据，
+    #没有的数据会显示NaN
+    df=pd.DataFrame({s1.name:s1,s2.name:s2,s3.name:s3})#以字典的形式放入df中
+    print(df)
+    df=pd.DataFrame([s1,s2,s3])#以列表的形式放入df中
+    print(df)

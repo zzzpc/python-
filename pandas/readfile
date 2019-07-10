@@ -1,0 +1,13 @@
+import numpy as np
+import pandas as pd
+
+
+if __name__ == '__main__':
+    df=pd.read_excel("cc.xlsx",header=None)#设置header为none后INDEX索引值就变为数字（index_col可以指定索引列）
+    print(df.shape)  #返回df的行列即具体维数
+    print(df.columns) #返回df的各列属性名称
+    df.columns=['序号1','班级2 ','学号3','姓名4','报到证签往单位名称5','档案接收单位6','档案邮寄地址7','邮编8','档案接收电话']
+    print(df.columns)  # 修改后返回df的各列属性名称
+    print(df.head())  #返回df的前5行数据，默认是前五行
+    print(df.tail())
+    df.to_excel("cc.xlsx")#转而保存

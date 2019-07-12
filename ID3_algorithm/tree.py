@@ -123,7 +123,7 @@ def majorityCnt(classList):
     """
     (1)判断所以实例是否属于同一类，是则返回
     """
-def ID3_createTree(dataset, labels):
+def ID3_createTree(dataset, labels):  #这是一个递归的函数，每次选择最优的属性，然后选择余下属性的最优属性知道所有特征遍历完毕
     classList = [example[-1] for example in dataset]
     if classList.count(classList[0]) == len(classList):
         # 类别完全相同，停止划分
@@ -135,12 +135,13 @@ def ID3_createTree(dataset, labels):
     bestFeatLabel = labels[bestFeat]
     print(u"此时最优索引为：" + (bestFeatLabel))
     ID3Tree = {bestFeatLabel: {}}
-    del (labels[bestFeat])
+    del (labels[bestFeat])   #每次选择完当前最佳类别是然后清空列表
     # 得到列表包括节点所有的属性值
     featValues = [example[bestFeat] for example in dataset]
     uniqueVals = set(featValues)
     for value in uniqueVals:
         subLabels = labels[:]
+        #递归的构造二叉树，在当前选择的最优值的键下填充其对应的值，亦即是最终构建出来它的子树部分
         ID3Tree[bestFeatLabel][value] = ID3_createTree(splitdataset(dataset, bestFeat, value), subLabels)
     return ID3Tree
 

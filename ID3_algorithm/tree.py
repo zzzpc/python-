@@ -201,3 +201,4 @@ if __name__ == '__main__':
     print('ID3_TestSet_classifyResult:\n', classifytest(ID3desicionTree, labels, testSet))
     print("---------------------------------------------")
 
+    #  代码源于https://github.com/Erikfather/Decision_tree-python/edit/master/tree.py

@@ -1,0 +1,24 @@
+import  pandas as pd
+import  matplotlib.pyplot as plt
+
+def   returns(s):
+    return  s>50
+def   string(s):
+    return  str(s).find("武汉")!=-1
+
+df=pd.read_excel("major.xlsx")
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+#以上两句用来使其最终结果显示中文
+#df.plot.bar(x='专业',y='人数')
+plt.bar(df['major'],df['num'],color='orange')
+plt.tight_layout()
+plt.xticks(df['major'],rotation='90')  #让标签值旋转90度
+plt.xlabel('专业')    #设置x,y轴名称
+plt.ylabel('人数')
+plt.title("我是渣渣")
+plt.show()
+
+
+

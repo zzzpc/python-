@@ -1,0 +1,13 @@
+import  pandas as pd
+import re
+
+def   returns(s):
+    return  s>50
+def   string(s):
+    return  str(s).find("武汉")!=-1
+
+df=pd.read_excel("cc.xlsx",header=1)
+                            #apply后面只接函数名，不要参数
+new=df.loc[df['档案接收单位'].apply(string)]    #loc[]括号里面必须是整形数据，用于定位，所以apply函数里必须是确切的筛选
+print(new)
+

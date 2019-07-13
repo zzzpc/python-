@@ -1,0 +1,24 @@
+import  pandas as pd
+import  matplotlib.pyplot as plt
+
+def   returns(s):
+    return  s>50
+def   string(s):
+    return  str(s).find("武汉")!=-1
+
+df=pd.read_excel("major.xlsx")
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+#以上两句用来使其最终结果显示中文
+#df.plot.bar(x='专业',y='人数')
+df.sort_values(by='num',inplace=True,ascending=False)
+df.plot.bar(x='major',y=['num1','num'])  #此处x与y对应的是索引名称，且索引名称要与表中的列名称想对应
+ax=plt.gca() #得到图形的X轴内容
+ax.set_xticklabels(df['major'],rotation='45')
+f=plt.gcf()#得到当前所画图形
+ 
+plt.show()
+
+
+

@@ -1,0 +1,25 @@
+import  pandas as pd
+import  matplotlib.pyplot as plt
+
+
+df=pd.read_excel("major.xlsx")
+
+df['total']=df['num']+df['num1']+df['num3']
+df.sort_values(by='total',inplace=True,ascending=False)
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+#以上两句用来使其最终结果显示中文
+#df.plot.bar(x='专业',y='人数')
+#df.sort_values(by='num',inplace=True,ascending=False) 用来排序得到的结果
+#df.plot.bar(x='major',y=['num','num1','num3'])  #此处x与y对应的是索引名称，且索引名称要与表中的列名称想对应
+df.plot.bar(x='major',y=['num','num1','num3'],stacked=True)#与之前多了一句stacked，表明该柱状图是三列叠加在一起的
+df.plot.barh(x='major',y=['num','num1','num3'],stacked=True)#函数名称变为barh,坐标轴互换
+ax=plt.gca() #得到图形的X轴内容
+ax.set_xticklabels(df['major'],rotation='45')
+f=plt.gcf()#得到当前所画图形
+
+plt.show()
+
+
+

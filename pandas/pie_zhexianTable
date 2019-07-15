@@ -1,0 +1,22 @@
+import  pandas as pd
+import  matplotlib.pyplot as plt
+
+
+df=pd.read_excel("major.xlsx",index_col='major')
+
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+#以上两句用来使其最终结果显示中文
+
+df['num'].plot.pie(counterclock=False)#其中的参数是让其顺时针旋转，默认是逆时针旋转
+
+#画折线图
+df.plot(y=['num','num1','num3'],color=['red','blue','yellow'])
+#画叠加折线图
+df.plot(y=['num','num1','num3'],color=['red','blue','yellow'])
+plt.title('专业趋势图',fontsize=24,fontweight='bold')
+plt.show()
+
+
+

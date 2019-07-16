@@ -1,0 +1,25 @@
+import  pandas as pd
+import  matplotlib.pyplot as plt
+
+pd.options.display.max_columns=999  #设置默认显示列数为999
+df=pd.read_excel("home_data.xlsx")
+print(df.corr())  #打印出来的是一个二维数组，表示各列之间的相关性，最大值为1
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+#以上两句用来使其最终结果显示中文
+
+#df.plot.scatter(x='price',y='sqft_living',color='green')
+
+#直方图
+#df['sqft_living'].plot.hist(bins=100,color='pink') #bins代表分布区间，
+plt.xticks(range(0,max(df['sqft_living']),500),fontsize=8,rotation=90)
+
+
+#密度分布图
+df['sqft_living'].plot.kde()
+plt.xticks(range(0,max(df['sqft_living']),500),fontsize=8,rotation=90)
+plt.show()
+
+
+

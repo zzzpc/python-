@@ -21,10 +21,6 @@ plt.legend()
 data=np.array(df.iloc[:100,[0,1,-1]])
 X,y=data[:,:-1] ,data[:,-1]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-print(X_train)
-print(X_test)
-print(y_train)
-print(y_test)
 class KNN:
     def __init__(self,X_train,y_train,n_neighbor=3,p=2):
         """
@@ -53,10 +49,9 @@ class KNN:
 
 
         #统计
-        knn=[k[-1] for k in knn_list]
-        count_pairs=Counter(knn)
+        knn=[k[-1] for k in knn_list]#对knn进行统计，返回最终label的一个统计结果，以列表形式存在
+        count_pairs=Counter(knn)  #多数表决，选择最多的类标签代表最终的结果
         max_count=sorted(count_pairs.items(),key=lambda x:x[1])[-1][0]
-        print(max_count)
         return max_count
 
     def   score(self,X_test,y_test):

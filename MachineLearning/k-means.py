@@ -4,20 +4,21 @@ from matplotlib import pyplot
 from sklearn.datasets import  load_iris
 import  pandas as pd
 import  random
+import  math
 
 class  K_means(object):
         def __init__(self,k=2,tolerance=0.0001,max_iter=300):
             self.k_=k
             self.tolerance_=tolerance
-            self.max_iter_=max_iter
+            self.max_iter_=max_iter #最大迭代次数
 
         def fit(self,data):
-            self.centers_={}
+            self.centers_={}  #新建一个字典，用来k个中心点及其坐标
             for i in range(self.k_) :
-                self.centers_[i]=data[i]
+                self.centers_[i]=data[i]    #开始的时候随机选择数据集的前k个作为中心点
 
             for i in range(self.max_iter_):
-                self.clf_={}
+                self.clf_={}  #新建一个字典，存储每个中心点所存储数据集中所属该类的每个点
                 for i in range(self.k_):
                     self.clf_[i]=[]  #分成k个组
                 # print("质点:",self.centers_)
@@ -25,7 +26,7 @@ class  K_means(object):
                     distances=[]
                     for center in self.centers_:
                         #欧氏距离(第二范式)  求数据集中每一个点到中心点的距离
-                        distances.append(np.linalg.norm(feature-self.centers_[center]))
+                        distances.append(np.linalg.norm(feature-self.centers_[center],ord=2))
                     #选择最小的距离下标作为分类中心
                     classification=distances.index(min(distances))
 
@@ -48,7 +49,7 @@ class  K_means(object):
 
 
         def  predict(self,p_data):
-            distance=[np.linalg.norm(p_data-self.centers_[center]) for center in self.centers_]
+            distance=[np.linalg.norm(p_data-self.centers_[center] ,ord=2) for center in self.centers_]
             index=distance.index(min(distance))
             return index
 
@@ -59,21 +60,22 @@ if __name__ == '__main__':
     data = np.array(df.iloc[:100, [0, 1]])
     X = data[:, :]
     x=np.array([[1,2],[1.5,1.8],[5,8],[8,8],[1,0.6],[9,11]])
-    print(x)
+
     k_means=K_means(k=4)
     k_means.fit(X)
-    print(k_means.centers_)
+    print(k_means.centers_.values())
     color=['red','blue','yellow','black','orange']
     for center in k_means.centers_:
+
         pyplot.scatter(k_means.centers_[center][0],k_means.centers_[center][1],marker='*',s=180,color=color[center])
 
     for cat in k_means.clf_:
         for point in k_means.clf_[cat] :
             pyplot.scatter(point[0],point[1],c=color[cat])
 
-    predict=[[6,2],[4,5]]
+    predict=[[4.8,3.2],[4.9,3.4]]
     for feature in predict :
-        car=k_means.predict(predict)
-        pyplot.scatter(feature[0],feature[1],color='pink')
+        car=k_means.predict(feature)
+        pyplot.scatter(feature[0],feature[1],color=color[car],marker='+')
 
     pyplot.show()

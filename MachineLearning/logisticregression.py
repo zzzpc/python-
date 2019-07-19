@@ -37,9 +37,9 @@ class LogisticRegressionClassifier:
         self.weights=np.zeros((len(data_mat[0]),1),dtype=np.float32)
         for iter in range(self.max_iter):#开始迭代
             for i in range(len(X)) :
-                result=self.sigmoid(np.dot(data_mat[i],self.weights))
-                error=y[i]-result
-                self.weights+=self.learning_rate*error*np.transpose([data_mat[i]])
+                result=self.sigmoid(np.dot(data_mat[i],self.weights))  #输入向量与w向量的点积
+                error=y[i]-result   #错误度
+                self.weights+=self.learning_rate*error*np.transpose([data_mat[i]])  #对权重w更新
             #    print('LogisticRegression Model(learning_rate={},max_iter={})'.format(
               #      self.learning_rate, self.max_iter))
 
@@ -55,7 +55,8 @@ class LogisticRegressionClassifier:
 lr_clf =LogisticRegressionClassifier()
 lr_clf.fit(X_train, y_train)
 x_ponits = np.arange(4, 8)
-y_ = -(lr_clf.weights[1]*x_ponits + lr_clf.weights[0])/lr_clf.weights[2]
+print(lr_clf.weights)
+y_ = -(lr_clf.weights[1]*x_ponits + lr_clf.weights[0])/lr_clf.weights[2] #貌似与感知机中最后计算的线性函数过程相似
 plt.plot(x_ponits, y_)
 
 #lr_clf.show_graph()

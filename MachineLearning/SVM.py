@@ -30,16 +30,17 @@ class SVM :
         self.max_iter=max_iter
         self._kernel=kernel
 
-    def init_args(self,feature,label):#参数初始化
-        self.m,self.n=feature.shape
-        self.X=feature
-        self.y=label
-        self.b=0.0
+    def init_args(self, features, label):
+        self.m, self.n = features.shape
+        self.X = features
+        self.y = label
+        self.b = 0.0
 
-        self.alpha=np.ones(self.m)
-        self.E=[self._E[i] for i in range(self.m)]
-
-        self.C=1.0#松弛变量
+        # 将Ei保存在一个列表里
+        self.alpha = np.ones(self.m)
+        self.E = [self._E(i) for i in range(self.m)]
+        # 松弛变量
+        self.C = 1.0
 
     def _KKT(self,i):
          y_g=self._g(i)*self.y[i]   #KKT条件
@@ -51,10 +52,10 @@ class SVM :
              return y_g<=1
 
     # g(x)预测值，输入xi（X[i]）  分类决策函数(sign  1-n的求和)
-    def _g(self,i):
+    def _g(self,i):    #对应于公式7.104   g(x)表示对输入xi的预测值
         r=self.b
         for j in range(self.m) :
-            r+=self.alpha[j] *self.Y[j] *self._kernel(self.X[i],self.X[j])
+            r += self.alpha[j] * self.y[j] * self.kernel(self.X[i], self.X[j])
         return r
 
     #核函数
@@ -65,9 +66,9 @@ class SVM :
             return (sum([x1[k]*x2[k] for k in range(self.n)])+1)**2
         return  0
 
-    # E（x）为g(x)对输入x的预测值和y的差
+    # E（x）为g(x)对输入x的预测值和y的差   对应公式7-105
     def _E(self,i):
-        return self.g(i)-self.y[i]
+        return self._g(i) - self.y[i]
 
     def _init_alpha(self):
         # 外层循环首先遍历所有满足0<a<C的样本点，检验是否满足KKT
@@ -87,7 +88,7 @@ class SVM :
                 j = max(range(self.m), key=lambda x: self.E[x])
             return i, j
 
-    def _compare(self,_alpha,L,H): #满足alpha大于0小于C
+    def _compare(self,_alpha,L,H): #满足alpha大于0小于C   对应于公式 7-108   亦即经过剪辑后的解
         if _alpha >H :
             return  H
         elif _alpha <L :
@@ -99,7 +100,7 @@ class SVM :
         for t in range(self.max_iter):
             i1,i2 =self._init_alpha()  #返回初始化后的i，j
 
-            if self.y[i1] ==self.y[i2]:
+            if self.y[i1] ==self.y[i2]:   #判断y1是否等于y2
                 L=max(0,self.alpha[i1]+self.alpha[i2]-self.C)
                 H=min(self.C,self.alpha[i1]+self.alpha[i2])
             else:
@@ -108,28 +109,29 @@ class SVM :
 
             E1=self.E[i1]
             E2=self.E[i2]
-            #eta=K11+K22-2K12
-            eta=self.kernel(self.X[i1],self.X[i2])+self.kernel(
-                self.X[i2],
-                self.X[i2])-2*self.kernel(self.X[i1],self.X[i2])
+            #eta=K11+K22-2K12 对应于公式7-107
+            eta=self.kernel(self.X[i1],self.X[i1])+self.kernel(self.X[i2],self.X[i2])-2*self.kernel(self.X[i1],self.X[i2])
             if eta <=0 :
                 continue
 
-
-            alpha2_new_unc=self.alpha[i2] +self.y[i2]*(
-                E1-E2)/eta
-            alpha2_new=self._compare(alpha2_new,L,H)
+            #对应于公式7-106  表示沿着约束方向未经剪辑时的解
+            alpha2_new_unc=self.alpha[i2] +self.y[i2]*(E1-E2)/eta
+            alpha2_new=self._compare(alpha2_new_unc,L,H)  #计算经过剪辑后的解
+            #通过计算出来的alpha2来计算新的alpha1  对应公式7.109
             alpha1_new=self.alpha[i1]+self.y[i1]*self.y[i2]*(self.alpha[i2]-alpha2_new)
-
+            #对应公式7-115  在每次完成两个变量的优化后，重新计算阈值b
+            #此时是new_alpha1满足条件  0<alpha1<C   对应公式 7-115
             b1_new = -E1 - self.y[i1] * self.kernel(self.X[i1], self.X[i1]) * (
                     alpha1_new - self.alpha[i1]) - self.y[i2] * self.kernel(
                 self.X[i2],
                 self.X[i1]) * (alpha2_new - self.alpha[i2]) + self.b
+            # 此时是new_alpha2满足条件  0<alpha2<C  对应公式 7-116
             b2_new = -E2 - self.y[i1] * self.kernel(self.X[i1], self.X[i2]) * (
                     alpha1_new - self.alpha[i1]) - self.y[i2] * self.kernel(
                 self.X[i2],
                 self.X[i2]) * (alpha2_new - self.alpha[i2]) + self.b
 
+            #检测哪个alpha 满足条件 及
             if 0 < alpha1_new < self.C:
                 b_new = b1_new
             elif 0 < alpha2_new < self.C:
@@ -166,5 +168,12 @@ class SVM :
             yx = self.y.reshape(-1, 1) * self.X
             self.w = np.dot(yx.T, self.alpha)
             return self.w
+    def _b(self):
+        return self.b
 
-
+clf=SVM()
+clf.fit(X,y)
+print(clf._weight())
+plt.scatter(X[:50,0],X[:50,1],c='pink',label='0')
+plt.scatter(X[51:,0],X[51:,1],c='blue',label='0')
+plt.show()

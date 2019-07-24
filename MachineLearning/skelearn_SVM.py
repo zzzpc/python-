@@ -49,7 +49,7 @@ poly_kernel_svm_clf = Pipeline([ ( "scaler", StandardScaler()),
                                 ])
 poly_kernel_svm_clf.fit(X,y)
 plt.figure( figsize=(9,3) )
-plt.subplot(131)
+plt.subplot(231)  #一行三列 第一个
 plot_data( X, y, [-1.5, 2.5, -1, 1.5] )
 plot_predict( poly_kernel_svm_clf, [-1.5, 2.5, -1, 1.5] )
 
@@ -57,7 +57,7 @@ poly_kernel_svm_clf = Pipeline([ ( "scaler", StandardScaler()),
                                  ("svm_clf", SVC(kernel="poly", degree=3, coef0=0.5, C=1))
                                 ])
 poly_kernel_svm_clf.fit(X,y)
-plt.subplot(132)
+plt.subplot(232) #一行三列 第二个
 plot_data( X, y, [-1.5, 2.5, -1, 1.5] )
 plot_predict( poly_kernel_svm_clf, [-1.5, 2.5, -1, 1.5] )
 
@@ -66,9 +66,30 @@ poly_kernel_svm_clf = Pipeline([ ( "scaler", StandardScaler()),
                                  ("svm_clf", SVC(kernel="poly", degree=3, coef0=500, C=1))
                                 ])
 poly_kernel_svm_clf.fit(X,y)
-plt.subplot(133)
+plt.subplot(233)
 plot_data( X, y, [-1.5, 2.5, -1, 1.5] )
 plot_predict( poly_kernel_svm_clf, [-1.5, 2.5, -1, 1.5] )
+
+
+rbf_kernel_svm_clf = Pipeline([
+                                ("scaler", StandardScaler()),
+                                ("svm_clf", SVC(kernel="rbf", gamma=2, C=0.001))
+                                 #gamma为核函数前的系数，参数对最终拟合效果影响效果较为强烈
+                            ])
+
+plt.subplot(234)
+rbf_kernel_svm_clf.fit( X, y )
+plot_data( X, y, [-1.5, 2.5, -1, 1.5] )
+plot_predict( rbf_kernel_svm_clf, [-1.5, 2.5, -1, 1.5] )
+
+rbf_kernel_svm_clf = Pipeline([
+                                ("scaler", StandardScaler()),
+                                ("svm_clf", SVC(kernel="rbf", gamma=2, C=50))
+                            ])
+plt.subplot(235)
+rbf_kernel_svm_clf.fit( X, y )
+plot_data( X, y, [-1.5, 2.5, -1, 1.5] )
+plot_predict( rbf_kernel_svm_clf, [-1.5, 2.5, -1, 1.5] )
 
 
 

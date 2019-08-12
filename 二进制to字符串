@@ -1,0 +1,16 @@
+from bitarray import bitarray
+
+
+def str2bitarray(s):
+    ret = bitarray(''.join([bin(int('1' + hex(c)[2:], 16))[3:] for c in s.encode('utf-8')]))
+    return ret
+
+
+def bitarray2str(bit):
+    return bit.tobytes().decode('utf-8')
+
+
+str = str2bitarray('我')
+print(str)
+str1=bitarray('111001101000100010010010')
+print(bitarray2str(str1))
